@@ -129,6 +129,24 @@ onMounted(() => {
                         class="fill-height"
                         item-value="id"
                       >
+                        <template #item.status="{ item }">
+                          <v-chip
+                            :color="
+                              item.status === 'Success' ? 'success' : 'error'
+                            "
+                            :prepend-icon="
+                              item.status === 'Success'
+                                ? 'mdi-check'
+                                : 'mdi-close'
+                            "
+                            size="small"
+                          >
+                            {{ item.status }}
+                          </v-chip>
+                        </template>
+                        <template #item.amount="{ item }">
+                          ${{ item.amount.toLocaleString() }}
+                        </template>
                         <template #bottom></template>
                       </v-data-table>
                     </v-expansion-panel-text>
