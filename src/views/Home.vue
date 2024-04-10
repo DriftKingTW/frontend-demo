@@ -60,6 +60,20 @@ const generateRandomData = () => {
   return formattedSampleDataset;
 };
 
+/**
+ * Load more data to paymentHistory
+ * @param {Object} options
+ * @param {Function} options.done
+ * @return {void}
+ */
+const tableScrollLoad = ({ done }) => {
+  setTimeout(() => {
+    paymentHistory.push(...generateRandomData());
+    paymentHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+    done("ok");
+  }, 1000);
+};
+
 // --- Lifecycle Hooks ---
 
 onMounted(() => {
@@ -120,35 +134,41 @@ onMounted(() => {
                     >
                       Payment History
                     </v-expansion-panel-title>
-                    <v-expansion-panel-text>
-                      <v-data-table
-                        :headers="headers"
+                    <v-expansion-panel-text class="expansion-panel-no-padding">
+                      <v-infinite-scroll
+                        height="450"
                         :items="paymentHistory"
-                        :items-per-page="-1"
-                        fixed-header
-                        class="fill-height"
-                        item-value="id"
+                        @load="tableScrollLoad"
+                        class="pb-4"
                       >
-                        <template #item.status="{ item }">
-                          <v-chip
-                            :color="
-                              item.status === 'Success' ? 'success' : 'error'
-                            "
-                            :prepend-icon="
-                              item.status === 'Success'
-                                ? 'mdi-check'
-                                : 'mdi-close'
-                            "
-                            size="small"
-                          >
-                            {{ item.status }}
-                          </v-chip>
-                        </template>
-                        <template #item.amount="{ item }">
-                          ${{ item.amount.toLocaleString() }}
-                        </template>
-                        <template #bottom></template>
-                      </v-data-table>
+                        <v-data-table
+                          id="#scroll-table"
+                          :headers="headers"
+                          :items="paymentHistory"
+                          :items-per-page="-1"
+                          item-value="id"
+                        >
+                          <template #item.status="{ item }">
+                            <v-chip
+                              :color="
+                                item.status === 'Success' ? 'success' : 'error'
+                              "
+                              :prepend-icon="
+                                item.status === 'Success'
+                                  ? 'mdi-check'
+                                  : 'mdi-close'
+                              "
+                              size="small"
+                            >
+                              {{ item.status }}
+                            </v-chip>
+                          </template>
+                          <template #item.amount="{ item }">
+                            ${{ item.amount.toLocaleString() }}
+                          </template>
+                          <template #bottom></template>
+                        </v-data-table>
+                      </v-infinite-scroll>
                     </v-expansion-panel-text>
                   </v-expansion-panel>
                 </v-expansion-panels>
@@ -179,4 +199,8 @@ onMounted(() => {
   </v-container>
 </template>
 
-<style scoped></style>
+<style scoped>
+.expansion-panel-no-padding::v-deep .v-expansion-panel-text__wrapper {
+  padding: 0;
+}
+</style>
