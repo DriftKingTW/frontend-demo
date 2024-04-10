@@ -136,7 +136,7 @@ onMounted(() => {
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="expansion-panel-no-padding">
                       <v-infinite-scroll
-                        height="450"
+                        height="h-screen"
                         :items="paymentHistory"
                         @load="tableScrollLoad"
                         class="pb-4"
