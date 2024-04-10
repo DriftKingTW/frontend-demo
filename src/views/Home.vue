@@ -1,6 +1,10 @@
 <script setup>
 import { ref, reactive, onMounted, computed } from "vue";
 import { v4 as uuidv4 } from "uuid";
+import LineSmooth from "@/components/echarts/LineSmooth.vue";
+import BarChart from "@/components/echarts/BarChart.vue";
+import PieChart from "@/components/echarts/PieChart.vue";
+import LineBarChart from "../components/echarts/LineBarChart.vue";
 
 // --- Data ---
 const panel = ref([0]);
@@ -97,26 +101,16 @@ onMounted(() => {
               >
               <v-card-text>
                 <v-row class="mt-2">
-                  <v-col cols="4">
-                    <v-card variant="tonal">
-                      <v-card-text>
-                        <p>Figure 1</p>
-                      </v-card-text>
-                    </v-card>
+                  <v-col cols="4" class="d-flex figures-row">
+                    <LineSmooth class="fill-height" />
+                    <v-divider vertical></v-divider>
                   </v-col>
-                  <v-col cols="4">
-                    <v-card variant="tonal">
-                      <v-card-text>
-                        <p>Figure 2</p>
-                      </v-card-text>
-                    </v-card>
+                  <v-col cols="4" class="d-flex figures-row">
+                    <BarChart class="fill-height" />
+                    <v-divider vertical></v-divider>
                   </v-col>
-                  <v-col cols="4">
-                    <v-card variant="tonal">
-                      <v-card-text>
-                        <p>Figure 3</p>
-                      </v-card-text>
-                    </v-card>
+                  <v-col cols="4" class="d-flex figures-row">
+                    <PieChart class="fill-height" />
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -184,12 +178,8 @@ onMounted(() => {
           <v-card-title class="bg-grey-darken-3">Trending</v-card-title>
           <v-card-text>
             <v-row class="mt-2">
-              <v-col cols="12">
-                <v-card variant="tonal" style="height: 600px">
-                  <v-card-text>
-                    <p>Figure 4</p>
-                  </v-card-text>
-                </v-card>
+              <v-col cols="12" style="height: 80vh">
+                <LineBarChart class="chart" />
               </v-col>
             </v-row>
           </v-card-text>
@@ -200,7 +190,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.expansion-panel-no-padding::v-deep .v-expansion-panel-text__wrapper {
+.expansion-panel-no-padding:v-deep(.v-expansion-panel-text__wrapper) {
   padding: 0;
+}
+
+.figures-row {
+  height: 200px;
 }
 </style>
