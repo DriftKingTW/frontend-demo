@@ -129,6 +129,21 @@ const option = ref({
         },
       },
       data: props.barData1,
+      emphasis: {
+        label: {
+          show: true,
+          position: "top",
+          distance: 0,
+          offset: [0, 10],
+          color: "#FFF",
+          fontSize: 20,
+          textBorderColor: "#5470C6",
+          textBorderWidth: 4,
+          formatter: function () {
+            return "●";
+          },
+        },
+      },
     },
     {
       name: "Outgoing",
@@ -141,6 +156,21 @@ const option = ref({
         },
       },
       data: props.barData2,
+      emphasis: {
+        label: {
+          show: true,
+          position: "bottom",
+          distance: 0,
+          offset: [0, -10],
+          color: "#FFF",
+          fontSize: 20,
+          textBorderColor: "#91CC75",
+          textBorderWidth: 4,
+          formatter: function () {
+            return "●";
+          },
+        },
+      },
     },
     {
       name: "Balance",
