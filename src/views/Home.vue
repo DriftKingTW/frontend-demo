@@ -36,6 +36,9 @@ const trendingChartKey = ref(0);
 
 const pageLoading = ref(true);
 
+// Easter Egg dialog for cow
+const cowDialog = ref(false);
+
 // --- Functions ---
 /**
  * Generate 10 random data to paymentHistory
@@ -191,6 +194,16 @@ const fakeAPICall = async () => {
   });
 };
 
+/**
+ * Easter Egg: Show a cow on page
+ * @param {void}
+ * @return {void}
+ */
+const easterEgg = () => {
+  // show a cow on page
+  cowDialog.value = true;
+};
+
 // --- Lifecycle Hooks ---
 
 onMounted(async () => {
@@ -299,6 +312,27 @@ const paymentHistoryCount = computed(() => {
                             :items-per-page="-1"
                             item-value="id"
                           >
+                            <template #item.description="{ item }">
+                              <template v-if="item.description === 'Buy a cow'">
+                                <span @click="easterEgg" class="cursor-pointer">
+                                  {{ item.description }}
+                                  <v-dialog
+                                    v-model="cowDialog"
+                                    @click="cowDialog = false"
+                                  >
+                                    <span
+                                      style="font-size: 300px"
+                                      class="mx-auto text-white"
+                                    >
+                                      🐄 moo~
+                                    </span>
+                                  </v-dialog>
+                                </span>
+                              </template>
+                              <template v-else>
+                                {{ item.description }}
+                              </template>
+                            </template>
                             <template #item.status="{ item }">
                               <v-chip
                                 :color="
