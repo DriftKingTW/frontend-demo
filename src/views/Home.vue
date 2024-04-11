@@ -211,7 +211,7 @@ const paymentHistoryCount = computed(() => {
 </script>
 
 <template>
-  <v-container fluid min-width="1440px">
+  <v-container fluid>
     <v-dialog v-model="pageLoading" fullscreen transition="fade-transition">
       <v-card>
         <v-card-text class="d-flex justify-center align-center">
