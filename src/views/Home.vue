@@ -32,6 +32,8 @@ const trendingChartBalanceData = reactive([]);
 const trendingChartDate = reactive([]);
 const trendingChartKey = ref(0);
 
+const pageLoading = ref(true);
+
 // --- Functions ---
 /**
  * Generate 10 random data to paymentHistory
@@ -174,19 +176,47 @@ const fetchSampleData = async () => {
   trendingChartKey.value++;
 };
 
+/**
+ * Fake API call and wait for 3 seconds
+ * @param {void}
+ * @return {Promise}
+ */
+const fakeAPICall = async () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("ok");
+    }, 3000);
+  });
+};
+
 // --- Lifecycle Hooks ---
 
-onMounted(() => {
-  // Add sample data to paymentHistory
-  paymentHistory.push(...generateRandomData());
-  paymentHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  fetchSampleData();
+onMounted(async () => {
+  try {
+    await fakeAPICall();
+    await fetchSampleData();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    pageLoading.value = false;
+  }
 });
 </script>
 
 <template>
   <v-container>
+    <v-dialog v-model="pageLoading" fullscreen transition="fade-transition">
+      <v-card>
+        <v-card-text class="d-flex justify-center align-center">
+          <v-progress-circular
+            color="primary"
+            indeterminate="disable-shrink"
+            size="128"
+            width="12"
+          ></v-progress-circular>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-row>
       <!-- Left Section -->
       <v-col cols="8">
