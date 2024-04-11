@@ -211,144 +211,150 @@ const paymentHistoryCount = computed(() => {
 </script>
 
 <template>
-  <v-container fluid>
-    <v-dialog v-model="pageLoading" fullscreen transition="fade-transition">
-      <v-card>
-        <v-card-text class="d-flex justify-center align-center">
-          <v-progress-circular
-            color="primary"
-            indeterminate="disable-shrink"
-            size="128"
-            width="12"
-          ></v-progress-circular>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-row>
-      <!-- Left Section -->
-      <v-col cols="8">
-        <v-row>
-          <!-- Trading Status -->
-          <v-col cols="12">
-            <v-card variant="outlined">
-              <v-card-title class="bg-grey-darken-3"
-                >Trading Status</v-card-title
-              >
-              <v-card-text>
-                <v-row class="mt-2">
-                  <v-col cols="4" class="d-flex figures-row">
-                    <LineSmooth
-                      title="Transaction History in 14 Days"
-                      :data="transactionHistoryChartData"
-                      :legends="transactionHistoryChartDate"
-                      :key="transactionHistoryChartKey"
-                      class="fill-height"
-                    />
-                    <v-divider vertical></v-divider>
-                  </v-col>
-                  <v-col cols="4" class="d-flex figures-row">
-                    <BarChart
-                      title="Last 7 Days"
-                      subtitle="$52,658"
-                      class="fill-height"
-                      :data="lastSevenDaysChartData"
-                      :legends="lastSevenDaysChartDate"
-                      :key="lastSevenDaysChartKey"
-                    />
-                    <v-divider vertical></v-divider>
-                  </v-col>
-                  <v-col cols="4" class="d-flex figures-row">
-                    <PieChart
-                      title="Assets"
-                      subtitle="$52,658"
-                      class="fill-height"
-                      :data="assetsChartData"
-                      :key="assetsChartKey"
-                    />
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-col>
-
-          <!-- Payment History -->
-          <v-col cols="12">
-            <v-card variant="outlined">
-              <v-card-text class="pa-0">
-                <v-expansion-panels v-model="panel">
-                  <v-expansion-panel>
-                    <v-expansion-panel-title
-                      class="text-h6 pl-4 bg-grey-darken-3"
-                    >
-                      Payment History ({{ paymentHistoryCount }})
-                    </v-expansion-panel-title>
-                    <v-expansion-panel-text class="expansion-panel-no-padding">
-                      <v-infinite-scroll
-                        height="h-screen"
-                        :items="paymentHistory"
-                        @load="tableScrollLoad"
-                        class="pb-4"
-                      >
-                        <v-data-table
-                          id="#scroll-table"
-                          :headers="headers"
-                          :items="paymentHistory"
-                          :items-per-page="-1"
-                          item-value="id"
-                        >
-                          <template #item.status="{ item }">
-                            <v-chip
-                              :color="
-                                item.status === 'Success' ? 'success' : 'error'
-                              "
-                              :prepend-icon="
-                                item.status === 'Success'
-                                  ? 'mdi-check'
-                                  : 'mdi-close'
-                              "
-                              size="small"
-                            >
-                              {{ item.status }}
-                            </v-chip>
-                          </template>
-                          <template #item.amount="{ item }">
-                            ${{ item.amount.toLocaleString() }}
-                          </template>
-                          <template #bottom></template>
-                        </v-data-table>
-                      </v-infinite-scroll>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-
-      <!-- Right Section -->
-      <v-col cols="4">
-        <v-card variant="outlined">
-          <v-card-title class="bg-grey-darken-3">Trending</v-card-title>
-          <v-card-text>
-            <v-row class="mt-2">
-              <v-col cols="12" style="height: 80vh">
-                <LineBarChart
-                  class="chart"
-                  :barData1="trendingChartIncomingData"
-                  :barData2="trendingChartOutgoingData"
-                  :lineData="trendingChartBalanceData"
-                  :legends="trendingChartDate"
-                  :dataLegends="['Incoming', 'Outgoing', 'Balance']"
-                  :key="trendingChartKey"
-                />
-              </v-col>
-            </v-row>
+  <div class="mx-auto" style="max-width: 1920px">
+    <v-container fluid>
+      <v-dialog v-model="pageLoading" fullscreen transition="fade-transition">
+        <v-card>
+          <v-card-text class="d-flex justify-center align-center">
+            <v-progress-circular
+              color="primary"
+              indeterminate="disable-shrink"
+              size="128"
+              width="12"
+            ></v-progress-circular>
           </v-card-text>
         </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+      </v-dialog>
+      <v-row>
+        <!-- Left Section -->
+        <v-col cols="8">
+          <v-row>
+            <!-- Trading Status -->
+            <v-col cols="12">
+              <v-card variant="outlined">
+                <v-card-title class="bg-grey-darken-3"
+                  >Trading Status</v-card-title
+                >
+                <v-card-text>
+                  <v-row class="mt-2">
+                    <v-col cols="4" class="d-flex figures-row">
+                      <LineSmooth
+                        title="Transaction History in 14 Days"
+                        :data="transactionHistoryChartData"
+                        :legends="transactionHistoryChartDate"
+                        :key="transactionHistoryChartKey"
+                        class="fill-height"
+                      />
+                      <v-divider vertical></v-divider>
+                    </v-col>
+                    <v-col cols="4" class="d-flex figures-row">
+                      <BarChart
+                        title="Last 7 Days"
+                        subtitle="$52,658"
+                        class="fill-height"
+                        :data="lastSevenDaysChartData"
+                        :legends="lastSevenDaysChartDate"
+                        :key="lastSevenDaysChartKey"
+                      />
+                      <v-divider vertical></v-divider>
+                    </v-col>
+                    <v-col cols="4" class="d-flex figures-row">
+                      <PieChart
+                        title="Assets"
+                        subtitle="$52,658"
+                        class="fill-height"
+                        :data="assetsChartData"
+                        :key="assetsChartKey"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+
+            <!-- Payment History -->
+            <v-col cols="12">
+              <v-card variant="outlined">
+                <v-card-text class="pa-0">
+                  <v-expansion-panels v-model="panel">
+                    <v-expansion-panel>
+                      <v-expansion-panel-title
+                        class="text-h6 pl-4 bg-grey-darken-3"
+                      >
+                        Payment History ({{ paymentHistoryCount }})
+                      </v-expansion-panel-title>
+                      <v-expansion-panel-text
+                        class="expansion-panel-no-padding"
+                      >
+                        <v-infinite-scroll
+                          height="h-screen"
+                          :items="paymentHistory"
+                          @load="tableScrollLoad"
+                          class="pb-4"
+                        >
+                          <v-data-table
+                            id="#scroll-table"
+                            :headers="headers"
+                            :items="paymentHistory"
+                            :items-per-page="-1"
+                            item-value="id"
+                          >
+                            <template #item.status="{ item }">
+                              <v-chip
+                                :color="
+                                  item.status === 'Success'
+                                    ? 'success'
+                                    : 'error'
+                                "
+                                :prepend-icon="
+                                  item.status === 'Success'
+                                    ? 'mdi-check'
+                                    : 'mdi-close'
+                                "
+                                size="small"
+                              >
+                                {{ item.status }}
+                              </v-chip>
+                            </template>
+                            <template #item.amount="{ item }">
+                              ${{ item.amount.toLocaleString() }}
+                            </template>
+                            <template #bottom></template>
+                          </v-data-table>
+                        </v-infinite-scroll>
+                      </v-expansion-panel-text>
+                    </v-expansion-panel>
+                  </v-expansion-panels>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-col>
+
+        <!-- Right Section -->
+        <v-col cols="4">
+          <v-card variant="outlined">
+            <v-card-title class="bg-grey-darken-3">Trending</v-card-title>
+            <v-card-text>
+              <v-row class="mt-2">
+                <v-col cols="12" style="height: 80vh">
+                  <LineBarChart
+                    class="chart"
+                    :barData1="trendingChartIncomingData"
+                    :barData2="trendingChartOutgoingData"
+                    :lineData="trendingChartBalanceData"
+                    :legends="trendingChartDate"
+                    :dataLegends="['Incoming', 'Outgoing', 'Balance']"
+                    :key="trendingChartKey"
+                  />
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <style scoped>
