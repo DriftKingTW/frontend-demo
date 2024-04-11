@@ -128,10 +128,6 @@ const option = ref({
       type: "bar",
       stack: "Total",
       barWidth: "95%",
-      label: {
-        show: true,
-        position: "left",
-      },
       tooltip: {
         valueFormatter: function (value) {
           return value + " B";
