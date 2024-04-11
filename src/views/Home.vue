@@ -14,7 +14,9 @@ const headers = ref([
   { title: "Amount", key: "amount" },
   { title: "Status", key: "status" },
 ]);
+
 const paymentHistory = reactive([]);
+
 const transactionHistoryChartData = reactive([]);
 const transactionHistoryChartDate = reactive([]);
 const transactionHistoryChartKey = ref(0);
@@ -201,6 +203,11 @@ onMounted(async () => {
     pageLoading.value = false;
   }
 });
+
+// --- Computed ---
+const paymentHistoryCount = computed(() => {
+  return paymentHistory.length;
+});
 </script>
 
 <template>
@@ -273,7 +280,7 @@ onMounted(async () => {
                     <v-expansion-panel-title
                       class="text-h6 pl-4 bg-grey-darken-3"
                     >
-                      Payment History
+                      Payment History ({{ paymentHistoryCount }})
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="expansion-panel-no-padding">
                       <v-infinite-scroll
