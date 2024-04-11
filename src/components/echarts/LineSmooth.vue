@@ -23,15 +23,32 @@ use([
   CanvasRenderer,
 ]);
 
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true,
+  },
+  legends: {
+    type: Array,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: false,
+    default: "",
+  },
+});
+
 const option = ref({
   title: {
-    text: "Transaction History in 14 Days",
+    show: props.title.length > 0,
+    text: props.title.toUpperCase(),
     textStyle: {
       fontSize: 14,
     },
   },
   grid: {
-    left: "15%",
+    left: "20%",
     bottom: "15%",
   },
   confine: true,
@@ -39,7 +56,12 @@ const option = ref({
     trigger: "axis",
     formatter: function (params) {
       return (
-        params[0].name +
+        new Date(params[0].name).toLocaleString("en-US", {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        }) +
         "<br />" +
         params[0].marker +
         "Transactions: <b>" +
@@ -60,31 +82,25 @@ const option = ref({
     },
     axisLabel: {
       interval: 6,
+      formatter: function (value) {
+        const date = new Date(value);
+        return date.toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+        });
+      },
     },
-    data: [
-      "Mar 9",
-      "Mar 10",
-      "Mar 11",
-      "Mar 12",
-      "Mar 13",
-      "Mar 14",
-      "Mar 15",
-      "Mar 16",
-      "Mar 17",
-      "Mar 18",
-      "Mar 19",
-      "Mar 20",
-      "Mar 21",
-      "Mar 22",
-      "Mar 23",
-    ],
+    data: props.legends,
   },
   yAxis: {
-    type: "category",
+    type: "value",
+    splitNumber: 0.5,
+    min: function (value) {
+      return value.min;
+    },
     axisLabel: {
       hideOverlap: false,
       margin: 30,
-      interval: 5,
       formatter: function (value, index) {
         return value / 1000 + "k";
       },
@@ -101,10 +117,7 @@ const option = ref({
   },
   series: [
     {
-      data: [
-        820000, 932000, 901000, 934000, 932000, 2000000, 934000, 932000, 901000,
-        934000, 934000, 2000000, 1630000, 2100000, 2300000,
-      ],
+      data: props.data,
       type: "line",
       showSymbol: false,
       smooth: true,

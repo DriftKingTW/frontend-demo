@@ -24,6 +24,29 @@ use([
   CanvasRenderer,
 ]);
 
+const props = defineProps({
+  barData1: {
+    type: Array,
+    required: true,
+  },
+  barData2: {
+    type: Array,
+    required: true,
+  },
+  lineData: {
+    type: Array,
+    required: true,
+  },
+  dataLegends: {
+    type: Array,
+    required: true,
+  },
+  legends: {
+    type: Array,
+    required: true,
+  },
+});
+
 const option = ref({
   tooltip: {
     trigger: "axis",
@@ -34,30 +57,34 @@ const option = ref({
       },
     },
   },
+  grid: {
+    bottom: "10%",
+    top: "5%",
+  },
   legend: {
-    data: ["Incoming", "Outgoing", "Balance"],
+    data: props.dataLegends,
+    left: "start",
+    bottom: "2%",
+    itemWidth: 10,
+    itemHeight: 10,
+    icon: "circle",
   },
   xAxis: [
     {
       type: "category",
-      data: [
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu",
-        "Fri",
-        "Sat",
-        "Sun",
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu",
-        "Fri",
-        "Sat",
-        "Sun",
-      ],
+      data: props.legends,
       axisPointer: {
         type: "shadow",
+      },
+      axisLabel: {
+        interval: 30,
+        formatter: function (value) {
+          const date = new Date(value);
+          return date.toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+          });
+        },
       },
     },
   ],
@@ -94,10 +121,7 @@ const option = ref({
           return value + " B";
         },
       },
-      data: [
-        2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3, -6,
-        -5, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2,
-      ],
+      data: props.barData1,
     },
     {
       name: "Outgoing",
@@ -113,24 +137,22 @@ const option = ref({
           return value + " B";
         },
       },
-      data: [
-        -120, -132, -101, -134, -190, -230, -210, -120, -132, -101, -134, -190,
-        -230, -210,
-      ],
+      data: props.barData2,
     },
     {
       name: "Balance",
       type: "line",
-      yAxisIndex: 1,
+      showSymbol: false,
+      lineStyle: {
+        width: 3,
+      },
+      symbolSize: 10,
       tooltip: {
         valueFormatter: function (value) {
           return value + " B";
         },
       },
-      data: [
-        -6, -5, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2, -6, -5,
-        3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2,
-      ],
+      data: props.lineData,
     },
   ],
 });

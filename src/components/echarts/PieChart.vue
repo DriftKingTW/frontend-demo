@@ -23,10 +23,28 @@ use([
   CanvasRenderer,
 ]);
 
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  subtitle: {
+    type: String,
+    required: false,
+    default: "",
+  },
+});
+
 const option = ref({
   title: {
-    text: "Assets",
-    subtext: "$52,658",
+    show: props.title.length > 0 || props.subtitle.length > 0,
+    text: props.title,
+    subtext: props.subtitle,
     top: "30%",
     textStyle: {
       fontSize: 16,
@@ -68,12 +86,7 @@ const option = ref({
       labelLine: {
         show: false,
       },
-      data: [
-        { value: 1048, name: "USDC" },
-        { value: 735, name: "ETH" },
-        { value: 580, name: "BTC" },
-        { value: 272, name: "Other" },
-      ],
+      data: props.data,
     },
   ],
 });

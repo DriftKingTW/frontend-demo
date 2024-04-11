@@ -13,10 +13,32 @@ import { CanvasRenderer } from "echarts/renderers";
 
 use([GridComponent, BarChart, CanvasRenderer]);
 
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true,
+  },
+  legends: {
+    type: Array,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  subtitle: {
+    type: String,
+    required: false,
+    default: "",
+  },
+});
+
 const option = ref({
   title: {
-    text: "Last 7 Days",
-    subtext: "$52,658",
+    show: props.title.length > 0 || props.subtitle.length > 0,
+    text: props.title,
+    subtext: props.subtitle,
     top: "30%",
     textStyle: {
       fontSize: 16,
@@ -45,7 +67,7 @@ const option = ref({
     axisTick: {
       show: false,
     },
-    data: ["T", "F", "S", "S", "M", "T", "W"],
+    data: props.legends,
   },
   yAxis: {
     type: "value",
@@ -53,7 +75,7 @@ const option = ref({
   },
   series: [
     {
-      data: [120, 200, 150, 80, 70, 110, 130],
+      data: props.data,
       type: "bar",
       showBackground: true,
       backgroundStyle: {},

@@ -15,6 +15,22 @@ const headers = ref([
   { title: "Status", key: "status" },
 ]);
 const paymentHistory = reactive([]);
+const transactionHistoryChartData = reactive([]);
+const transactionHistoryChartDate = reactive([]);
+const transactionHistoryChartKey = ref(0);
+
+const lastSevenDaysChartData = reactive([]);
+const lastSevenDaysChartDate = reactive([]);
+const lastSevenDaysChartKey = ref(0);
+
+const assetsChartData = reactive([]);
+const assetsChartKey = ref(0);
+
+const trendingChartIncomingData = reactive([]);
+const trendingChartOutgoingData = reactive([]);
+const trendingChartBalanceData = reactive([]);
+const trendingChartDate = reactive([]);
+const trendingChartKey = ref(0);
 
 // --- Functions ---
 /**
@@ -78,12 +94,94 @@ const tableScrollLoad = ({ done }) => {
   }, 1000);
 };
 
+/**
+ * Fetch sample data for charts
+ * @param {void}
+ * @return {void}
+ */
+const fetchSampleData = async () => {
+  // Generate random data for transaction history chart
+  const startDate = new Date(2024, 2, 9);
+  const endDate = new Date(2024, 2, 23);
+  const dateRange = Array.from(
+    { length: (endDate - startDate) / (24 * 60 * 60 * 1000) + 1 },
+    (_, i) => new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000)
+  );
+  transactionHistoryChartDate.push(...dateRange);
+
+  // random value from 1000k to 2000k, and the value can be divided by 50k
+  transactionHistoryChartData.push(
+    ...Array.from(
+      { length: dateRange.length },
+      () => Math.floor(Math.random() * 2000 + 1000) * 1000
+    )
+  );
+  transactionHistoryChartKey.value++;
+
+  // Generate random data for last 7 days chart
+  lastSevenDaysChartData.push(
+    ...Array.from({ length: 7 }, () => Math.floor(Math.random() * 200 + 50))
+  );
+  lastSevenDaysChartDate.push(...["T", "F", "S", "S", "M", "T", "W"]);
+  lastSevenDaysChartKey.value++;
+
+  // Add sample data to assets chart
+  assetsChartData.push(
+    ...[
+      {
+        value: 1048,
+        name: "USDC",
+      },
+      {
+        value: 735,
+        name: "ETH",
+      },
+      {
+        value: 580,
+        name: "BTC",
+      },
+      {
+        value: 484,
+        name: "Other",
+      },
+    ]
+  );
+  assetsChartKey.value++;
+
+  // Generate random data for trending chart
+  trendingChartIncomingData.push(
+    ...Array.from({ length: 60 }, () => Math.floor(Math.random() * 20))
+  );
+  trendingChartOutgoingData.push(
+    ...Array.from({ length: 60 }, () => Math.floor(Math.random() * 20) - 20)
+  );
+  // Calculate balance data
+  trendingChartBalanceData.push(
+    ...trendingChartIncomingData.map((incoming, index) => {
+      return incoming + trendingChartOutgoingData[index];
+    })
+  );
+  // Generate date range
+  trendingChartDate.push(
+    ...Array.from({ length: 60 }, (_, i) => {
+      const date = new Date(2024, 2, 1 + i);
+      return date.toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+    })
+  );
+  trendingChartKey.value++;
+};
+
 // --- Lifecycle Hooks ---
 
 onMounted(() => {
   // Add sample data to paymentHistory
   paymentHistory.push(...generateRandomData());
   paymentHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  fetchSampleData();
 });
 </script>
 
@@ -102,15 +200,34 @@ onMounted(() => {
               <v-card-text>
                 <v-row class="mt-2">
                   <v-col cols="4" class="d-flex figures-row">
-                    <LineSmooth class="fill-height" />
+                    <LineSmooth
+                      title="Transaction History in 14 Days"
+                      :data="transactionHistoryChartData"
+                      :legends="transactionHistoryChartDate"
+                      :key="transactionHistoryChartKey"
+                      class="fill-height"
+                    />
                     <v-divider vertical></v-divider>
                   </v-col>
                   <v-col cols="4" class="d-flex figures-row">
-                    <BarChart class="fill-height" />
+                    <BarChart
+                      title="Last 7 Days"
+                      subtitle="$52,658"
+                      class="fill-height"
+                      :data="lastSevenDaysChartData"
+                      :legends="lastSevenDaysChartDate"
+                      :key="lastSevenDaysChartKey"
+                    />
                     <v-divider vertical></v-divider>
                   </v-col>
                   <v-col cols="4" class="d-flex figures-row">
-                    <PieChart class="fill-height" />
+                    <PieChart
+                      title="Assets"
+                      subtitle="$52,658"
+                      class="fill-height"
+                      :data="assetsChartData"
+                      :key="assetsChartKey"
+                    />
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -179,7 +296,15 @@ onMounted(() => {
           <v-card-text>
             <v-row class="mt-2">
               <v-col cols="12" style="height: 80vh">
-                <LineBarChart class="chart" />
+                <LineBarChart
+                  class="chart"
+                  :barData1="trendingChartIncomingData"
+                  :barData2="trendingChartOutgoingData"
+                  :lineData="trendingChartBalanceData"
+                  :legends="trendingChartDate"
+                  :dataLegends="['Incoming', 'Outgoing', 'Balance']"
+                  :key="trendingChartKey"
+                />
               </v-col>
             </v-row>
           </v-card-text>
