@@ -1,5 +1,5 @@
 <template>
-  <v-chart class="chart" :option="option" />
+  <v-chart class="chart" :option="option" :autoresize="true" />
 </template>
 
 <script setup>
@@ -48,7 +48,7 @@ const option = ref({
     },
   },
   grid: {
-    left: "20%",
+    left: "80rem",
     bottom: "15%",
   },
   confine: true,

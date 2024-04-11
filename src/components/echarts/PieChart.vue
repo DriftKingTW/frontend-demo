@@ -1,5 +1,5 @@
 <template>
-  <v-chart class="chart" :option="option" />
+  <v-chart class="chart" :option="option" :autoresize="true" />
 </template>
 
 <script setup>
@@ -69,9 +69,9 @@ const option = ref({
     {
       name: "Currency",
       type: "pie",
-      radius: ["55%", "70%"],
+      radius: ["50%", "65%"],
       avoidLabelOverlap: false,
-      center: ["80%", "50%"],
+      center: ["70%", "50%"],
       label: {
         show: false,
         position: "center",

@@ -1,5 +1,5 @@
 <template>
-  <v-chart class="chart" :option="option" />
+  <v-chart class="chart" :option="option" :autoresize="true" />
 </template>
 
 <script setup>
@@ -60,6 +60,8 @@ const option = ref({
   grid: {
     bottom: "10%",
     top: "5%",
+    right: "100rem",
+    left: "100rem",
   },
   legend: {
     data: props.dataLegends,
@@ -91,7 +93,9 @@ const option = ref({
   yAxis: [
     {
       type: "value",
-      name: "Incoming",
+      name: "Incoming/Outgoing",
+      nameLocation: "middle",
+      nameGap: 50,
       min: -20,
       max: 20,
       interval: 5,
@@ -101,7 +105,10 @@ const option = ref({
     },
     {
       type: "value",
-      name: "Outgoing",
+      name: "Balance",
+      nameLocation: "middle",
+      nameGap: 50,
+      nameRotate: 270,
       min: -20,
       max: 20,
       interval: 5,
