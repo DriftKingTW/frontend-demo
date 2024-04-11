@@ -63,7 +63,7 @@ const option = ref({
   },
   legend: {
     data: props.dataLegends,
-    left: "start",
+    left: "5%",
     bottom: "2%",
     itemWidth: 10,
     itemHeight: 10,
