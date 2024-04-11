@@ -109,7 +109,7 @@ const fetchSampleData = async () => {
   );
   transactionHistoryChartDate.push(...dateRange);
 
-  // random value from 1000k to 2000k, and the value can be divided by 50k
+  // Random value from 1000k to 2000k, and the value can be divided by 1k
   transactionHistoryChartData.push(
     ...Array.from(
       { length: dateRange.length },
